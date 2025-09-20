@@ -36,7 +36,7 @@ add_link_options(
     -ffunction-sections
     -fdata-sections
     -Wl,--gc-sections
-    
+
     # -Wl,--allow-multiple-definition
     -Wl,-Map=${PROJECT_NAME}.map,--cref,--print-memory-usage
     -Wl,--start-group
@@ -47,4 +47,3 @@ add_link_options(
 
     --sysroot=/usr/riscv64-elf
 )
-

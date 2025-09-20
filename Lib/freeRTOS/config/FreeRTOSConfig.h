@@ -26,7 +26,7 @@
 
 #define configMTIME_BASE_ADDRESS                 RISCV_MTIME_ADDR
 #define configMTIMECMP_BASE_ADDRESS              RISCV_MTIMECMP_ADDR
-#define configISR_STACK_SIZE_WORDS               ( 512 ) 
+#define configISR_STACK_SIZE_WORDS               ( 512 )
 
 #define configENABLE_FPU                         0
 #define configENABLE_MPU                         0

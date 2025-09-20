@@ -42,14 +42,14 @@
 /** @defgroup FLASH_Private_Defines Приватные определения
   * @{
   */
-#define __NOP() asm volatile ("nop")
+#define __NOP() asm volatile("nop")
 
 #define __NOP5() \
-    __NOP();     \
-    __NOP();     \
-    __NOP();     \
-    __NOP();     \
-    __NOP()
+	__NOP(); \
+	__NOP(); \
+	__NOP(); \
+	__NOP(); \
+	__NOP()
 
 /**
   * @}
@@ -66,22 +66,23 @@
   * @param   Region  Выбор области
   * @retval  void
   */
-void FLASH_ReadData(uint32_t AddrVal, uint32_t* DataArr, FLASH_Region_TypeDef Region)
+void FLASH_ReadData(uint32_t AddrVal, uint32_t *DataArr,
+		    FLASH_Region_TypeDef Region)
 {
-    assert_param(IS_FLASH_REGION(Region));
-    if (Region == FLASH_Region_Main)
-        assert_param(IS_FLASH_MAIN_ADDR(AddrVal));
-    else /* (Region == FLASH_Region_NVR) */
-        assert_param(IS_FLASH_NVR_ADDR(AddrVal));
+	assert_param(IS_FLASH_REGION(Region));
+	if (Region == FLASH_Region_Main)
+		assert_param(IS_FLASH_MAIN_ADDR(AddrVal));
+	else /* (Region == FLASH_Region_NVR) */
+		assert_param(IS_FLASH_NVR_ADDR(AddrVal));
 
-    FLASH_SetAddr(AddrVal);
-    FLASH_SetCmd(FLASH_Cmd_Read, Region);
-    __NOP5();
-    while (FLASH_BusyStatus()) {
-    };
-    for (uint32_t i = 0; i < MEM_FLASH_BUS_WIDTH_WORDS; i++) {
-        DataArr[i] = FLASH_GetData(i);
-    }
+	FLASH_SetAddr(AddrVal);
+	FLASH_SetCmd(FLASH_Cmd_Read, Region);
+	__NOP5();
+	while (FLASH_BusyStatus()) {
+	};
+	for (uint32_t i = 0; i < MEM_FLASH_BUS_WIDTH_WORDS; i++) {
+		DataArr[i] = FLASH_GetData(i);
+	}
 }
 
 /**
@@ -91,22 +92,23 @@ void FLASH_ReadData(uint32_t AddrVal, uint32_t* DataArr, FLASH_Region_TypeDef Re
   * @param   Region  Выбор области
   * @retval  void
   */
-void FLASH_WriteData(uint32_t AddrVal, uint32_t* DataArr, FLASH_Region_TypeDef Region)
+void FLASH_WriteData(uint32_t AddrVal, uint32_t *DataArr,
+		     FLASH_Region_TypeDef Region)
 {
-    assert_param(IS_FLASH_REGION(Region));
-    if (Region == FLASH_Region_Main)
-        assert_param(IS_FLASH_MAIN_ADDR(AddrVal));
-    else /* (Region == FLASH_Region_NVR) */
-        assert_param(IS_FLASH_NVR_ADDR(AddrVal));
+	assert_param(IS_FLASH_REGION(Region));
+	if (Region == FLASH_Region_Main)
+		assert_param(IS_FLASH_MAIN_ADDR(AddrVal));
+	else /* (Region == FLASH_Region_NVR) */
+		assert_param(IS_FLASH_NVR_ADDR(AddrVal));
 
-    FLASH_SetAddr(AddrVal);
-    for (uint32_t i = 0; i < MEM_FLASH_BUS_WIDTH_WORDS; i++) {
-        FLASH_SetData(i, DataArr[i]);
-    }
-    FLASH_SetCmd(FLASH_Cmd_Write, Region);
-    __NOP5();
-    while (FLASH_BusyStatus()) {
-    };
+	FLASH_SetAddr(AddrVal);
+	for (uint32_t i = 0; i < MEM_FLASH_BUS_WIDTH_WORDS; i++) {
+		FLASH_SetData(i, DataArr[i]);
+	}
+	FLASH_SetCmd(FLASH_Cmd_Write, Region);
+	__NOP5();
+	while (FLASH_BusyStatus()) {
+	};
 }
 
 /**
@@ -117,17 +119,17 @@ void FLASH_WriteData(uint32_t AddrVal, uint32_t* DataArr, FLASH_Region_TypeDef R
   */
 void FLASH_ErasePage(uint32_t AddrVal, FLASH_Region_TypeDef Region)
 {
-    assert_param(IS_FLASH_REGION(Region));
-    if (Region == FLASH_Region_Main)
-        assert_param(IS_FLASH_MAIN_ADDR(AddrVal));
-    else /* (Region == FLASH_Region_NVR) */
-        assert_param(IS_FLASH_NVR_ADDR(AddrVal));
+	assert_param(IS_FLASH_REGION(Region));
+	if (Region == FLASH_Region_Main)
+		assert_param(IS_FLASH_MAIN_ADDR(AddrVal));
+	else /* (Region == FLASH_Region_NVR) */
+		assert_param(IS_FLASH_NVR_ADDR(AddrVal));
 
-    FLASH_SetAddr(AddrVal);
-    FLASH_SetCmd(FLASH_Cmd_ErasePage, Region);
-    __NOP5();
-    while (FLASH_BusyStatus()) {
-    };
+	FLASH_SetAddr(AddrVal);
+	FLASH_SetCmd(FLASH_Cmd_ErasePage, Region);
+	__NOP5();
+	while (FLASH_BusyStatus()) {
+	};
 }
 
 /**
@@ -137,12 +139,12 @@ void FLASH_ErasePage(uint32_t AddrVal, FLASH_Region_TypeDef Region)
   */
 void FLASH_EraseFull(FLASH_Region_TypeDef Region)
 {
-    assert_param(IS_FLASH_REGION(Region));
+	assert_param(IS_FLASH_REGION(Region));
 
-    FLASH_SetCmd(FLASH_Cmd_EraseFull, Region);
-    __NOP5();
-    while (FLASH_BusyStatus()) {
-    };
+	FLASH_SetCmd(FLASH_Cmd_EraseFull, Region);
+	__NOP5();
+	while (FLASH_BusyStatus()) {
+	};
 }
 
 /**

@@ -99,11 +99,11 @@ SECTIONS {
     *(.data .data.* .gnu.linkonce.d.*)
     _edata = .; PROVIDE (edata = .);
   } >REGION_DATA AT>REGION_TEXT
-  
+
   PROVIDE( __data_source_start = LOADADDR(.data) );
   PROVIDE( __data_target_start = ADDR(.data) );
   PROVIDE( __data_target_end = ADDR(.data) + SIZEOF(.data) );
-  
+
   PROVIDE( __sdata_source_start = LOADADDR(.sdata) );
   PROVIDE( __sdata_target_start = ADDR(.sdata) );
   PROVIDE( __sdata_target_end = ADDR(.sdata) + SIZEOF(.sdata) );
@@ -150,4 +150,3 @@ SECTIONS {
     *(.eh_frame .eh_frame.*)
   }
 }
-
