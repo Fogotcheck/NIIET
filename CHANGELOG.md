@@ -1,4 +1,4 @@
-# **[${PROJECT_NAME}-${PROJECT_VERSION}](https://github.com/Fogotcheck/stm32_cmake_build.git)**
+# **[${PROJECT_NAME}-${PROJECT_VERSION}](https://github.com/Fogotcheck/NIIET)**
 
 ## *Инфо*
 ```
