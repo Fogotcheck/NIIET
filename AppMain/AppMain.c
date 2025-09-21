@@ -2,6 +2,9 @@
  * Пример работы DMA с UART1 для К1921ВG015
  * Реализован прием по UART1 16-ти байт через DMA в массив UBUFF
  * После приема происходит отправка содержимого массива UBUFF в UART1 через DMA
+ * Описание, код работы примера взято из примера НИИЭТ, добавлен порт freeRTOS
+ * https://gitflic.ru/project/niiet/niiet_riscv_sdk/blob?file=projects%2FNIIET-DEV-K1921VG015%2Fuart_dma%2Fmain.c&branch=master
+ *
  * Настройки UART1:
  * GPIO: TX - A.3,  RX - A.2
  * BaudRate: 115200
