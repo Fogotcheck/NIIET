@@ -34,6 +34,7 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "freeRTOS_RiscV_provider.h"
 
 //-- Defines -------------------------------------------------------------------
 #define GPIOA_ALL_Msk 0xFFFF
@@ -211,13 +212,13 @@ void periph_init()
 }
 
 //--- USER FUNCTIONS ----------------------------------------------------------------------
-void freertos_risc_v_trap_handler();
+
 volatile uint32_t led_shift;
 //-- Main ----------------------------------------------------------------------
 int main(void)
 {
 	InterruptDisable();
-	write_csr(mtvec, freertos_risc_v_trap_handler);
+	freertos_risc_v_provider_init();
 
 	periph_init();
 	memset(UBUFF, 0, UBUFF_SIZE); //Очистка буфера UBUFF

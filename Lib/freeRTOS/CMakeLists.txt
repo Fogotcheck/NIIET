@@ -19,6 +19,7 @@ target_include_directories(
     freertos_config
     SYSTEM INTERFACE
     config
+    custom
 )
 
 target_link_libraries(
@@ -27,16 +28,14 @@ target_link_libraries(
     ${PROJECT_NAME}_CHIP_INTERFACE
 )
 
-# @TODO https://www.freertos.org/Using-FreeRTOS-on-RISC-V
-# Required compiler and assembler command line options
-# Different RISC-V implementations provide different handlers
-# for external interrupts, so it is necessary to tell the
-# FreeRTOS kernel which external interrupt handler to call.
-# To set the name of the external interrupt handler:
-# FetchContent_Declare(freertos_kernel
-#     GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
-#     GIT_TAG main
-# )
-# FetchContent_MakeAvailable(freertos_kernel)
+FetchContent_Declare(freertos_kernel
+    GIT_REPOSITORY https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+    GIT_TAG main
+)
+FetchContent_MakeAvailable(freertos_kernel)
 
-add_subdirectory(freertos_kernel)
+target_sources(
+    freertos_kernel
+    PRIVATE
+    custom/freeRTOS_RiscV_provider.c
+)
