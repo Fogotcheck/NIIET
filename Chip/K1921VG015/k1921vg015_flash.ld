@@ -15,7 +15,7 @@ REGION_ALIAS("REGION_TEXT",   ROM );
 REGION_ALIAS("REGION_RODATA", ROM );
 REGION_ALIAS("REGION_DATA",   RAM0);
 REGION_ALIAS("REGION_BSS",    RAM0);
-REGION_ALIAS("REGION_STACK",  RAM0);
+REGION_ALIAS("REGION_STACK",  RAM1);
 
 STACK_SIZE = 2048;
 
@@ -139,8 +139,8 @@ SECTIONS {
     PROVIDE(__TLS0_BASE__ = .);
   } >REGION_STACK
 
-  _heap_start = ALIGN(__bss_end, 16);
-  _heap_end   = DEFINED(HEAP_FIXED_AFTER_BSS) ? MIN(ALIGN(__STACK_START__, 16), (_heap_start + HEAP_FIXED_AFTER_BSS)) : ALIGN(__STACK_START__, 16);
+  _heap_start = ALIGN(ORIGIN(RAM1), 16);
+  _heap_end   = ORIGIN(RAM1) + LENGTH(RAM1) - STACK_SIZE - __TLS_SIZE__;
 
   /* discard relocation code */
   /* plf_init_relocate = plf_init_noreloc;*/

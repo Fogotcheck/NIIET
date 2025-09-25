@@ -33,7 +33,7 @@ target_sources(
 target_compile_definitions(
     ${MODULE_NAME}_INTERFACE
     INTERFACE
-    SYSCLK_HSE
+    SYSCLK_PLL
     HSECLK_VAL=16000000
     RETARGET
     CKO_HSE
