@@ -28,6 +28,7 @@ add_compile_options(
 )
 
 add_link_options(
+    --specs=nosys.specs
     -march=rv32imfc_zba_zbb_zbc_zbs_zicsr
     -mabi=ilp32f
     -nostartfiles

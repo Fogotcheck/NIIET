@@ -27,7 +27,8 @@ target_include_directories(
 target_sources(
     ${MODULE_NAME}_INTERFACE
     INTERFACE
-    ${niat_SOURCE_DIR}/platform/Device/K1921VG015/source/startup_k1921vg015.S
+    startup_k1921vg015.S
+    sys/sysmem.c
 )
 
 target_compile_definitions(
@@ -36,7 +37,7 @@ target_compile_definitions(
     SYSCLK_PLL
     HSECLK_VAL=16000000
     RETARGET
-    CKO_HSE
+    CKO_PLL0
 )
 
 # file(GLOB_RECURSE K1921VG015_CORE

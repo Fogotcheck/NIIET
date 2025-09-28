@@ -1,21 +1,21 @@
-/** @file
-*  @brief linker script for K1921VG015
-*/
-
 OUTPUT_ARCH( "riscv" )
 ENTRY(_start)
 
+_estack = ORIGIN(REGION_STACK) + LENGTH(REGION_STACK);
+_Min_Heap_Size = LENGTH(REGION_HEAP); /* required amount of heap */
+
 MEMORY {
-  ROM  (rwx) : ORIGIN = 0x80000000, LENGTH = 1024K
-  RAM0 (rwx) : ORIGIN = 0x40000000, LENGTH = 256K
-  RAM1 (rwx) : ORIGIN = 0x10000000, LENGTH = 64K
+  FLASH  (rx)  : ORIGIN = 0x80000000, LENGTH = 1024K
+  RAM    (rwx) : ORIGIN = 0x40000000, LENGTH = 256K
+  CCMRAM (rwx) : ORIGIN = 0x10000000, LENGTH = 64K
 }
 
-REGION_ALIAS("REGION_TEXT",   ROM );
-REGION_ALIAS("REGION_RODATA", ROM );
-REGION_ALIAS("REGION_DATA",   RAM0);
-REGION_ALIAS("REGION_BSS",    RAM0);
-REGION_ALIAS("REGION_STACK",  RAM1);
+REGION_ALIAS("REGION_TEXT",   FLASH );
+REGION_ALIAS("REGION_RODATA", FLASH );
+REGION_ALIAS("REGION_DATA",   RAM);
+REGION_ALIAS("REGION_BSS",    RAM);
+REGION_ALIAS("REGION_STACK",  RAM);
+REGION_ALIAS("REGION_HEAP",   CCMRAM);
 
 STACK_SIZE = 2048;
 
@@ -60,23 +60,6 @@ SECTIONS {
     PROVIDE(__TEXT_END__ = .);
   } >REGION_TEXT
 
-  /* thread-local data segment */
-  .tdata : ALIGN(4) {
-    PROVIDE(_tls_data = .);
-    PROVIDE(_tdata_start = .);
-    *(.tdata .tdata.*)
-    PROVIDE(_tdata_end = .);
-  } >REGION_RODATA
-
-  .tbss : ALIGN(4) {
-    PROVIDE(_tbss_start = .);
-    *(.tbss .tbss.*)
-    . = ALIGN(4);
-    PROVIDE(_tbss_end = .);
-  } >REGION_RODATA
-
-  __TLS_SIZE__ = (_tbss_end - _tdata_start + 0xf) & ~0xf;
-
   /* read-only data segment */
   .rodata : ALIGN(4) {
     *(.rodata) *(.rodata.*) *(.gnu.linkonce.r.*)
@@ -97,6 +80,8 @@ SECTIONS {
   .data : ALIGN(4) {
     __DATA_BEGIN__ = .;
     *(.data .data.* .gnu.linkonce.d.*)
+    *(.RamFunc)        /* .RamFunc sections */
+    *(.RamFunc*)       /* .RamFunc* sections */
     _edata = .; PROVIDE (edata = .);
   } >REGION_DATA AT>REGION_TEXT
 
@@ -121,8 +106,7 @@ SECTIONS {
     . = ALIGN(4);
     __BSS_END__ = .;
     PROVIDE(__bss_end = .);
-    PROVIDE(_end = .);
-    PROVIDE(__end = .);
+
   } >REGION_BSS
 
   /* End of uninitalized data segement */
@@ -130,17 +114,15 @@ SECTIONS {
   __global_pointer$ = MIN(__DATA_BEGIN__ + 0x780,
                           MAX(__SDATA_BEGIN__ + 0x780, __BSS_END__ - 0x780));
 
-  /* Stack segement */
-  .stack ORIGIN(REGION_STACK) + LENGTH(REGION_STACK) - STACK_SIZE - __TLS_SIZE__ : {
-    PROVIDE(__STACK_START__ = .);
-    . += STACK_SIZE;
-    PROVIDE(__C_STACK_TOP__ = .);
-    PROVIDE(__STACK_END__ = .);
-    PROVIDE(__TLS0_BASE__ = .);
-  } >REGION_STACK
-
-  _heap_start = ALIGN(ORIGIN(RAM1), 16);
-  _heap_end   = ORIGIN(RAM1) + LENGTH(RAM1) - STACK_SIZE - __TLS_SIZE__;
+  /* User_heap_stack section, used to check that there is enough "RAM" Ram  type memory left */
+  ._user_heap :
+  {
+    . = ALIGN(16);
+    PROVIDE ( end = . );
+    PROVIDE ( _end = . );
+    PROVIDE ( __end = . );
+    . = . + _Min_Heap_Size;
+  } >REGION_HEAP
 
   /* discard relocation code */
   /* plf_init_relocate = plf_init_noreloc;*/
