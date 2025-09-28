@@ -10,7 +10,7 @@ set(MCU_APP_LINKER_SCRIPT
 FetchContent_Declare(
     niat
     GIT_REPOSITORY https://gitflic.ru/project/niiet/niiet_riscv_sdk.git
-    GIT_TAG 8b681b00005b3ac94f4d4aab157ddcbd3ade24ad
+    GIT_TAG d65c69adf638636f7b3ff9dc12b81b6294641ba0
 )
 
 FetchContent_MakeAvailable(niat)
