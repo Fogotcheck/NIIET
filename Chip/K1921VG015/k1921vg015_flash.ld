@@ -60,6 +60,29 @@ SECTIONS {
     PROVIDE(__TEXT_END__ = .);
   } >REGION_TEXT
 
+  .init_array : ALIGN(4) {
+     KEEP(*(SORT(.init_array*)))
+  } >REGION_DATA AT>REGION_TEXT
+
+  .fini_array : ALIGN(4) {
+     KEEP(*(SORT(.fini_array*)))
+  } >REGION_DATA AT>REGION_TEXT
+
+  /* thread-local data segment */
+  .tdata : ALIGN(4) {
+    PROVIDE(_tls_data = .);
+    PROVIDE(_tdata_start = .);
+    *(.tdata .tdata.*)
+    PROVIDE(_tdata_end = .);
+  } >REGION_RODATA
+
+  .tbss : ALIGN(4) {
+    PROVIDE(_tbss_start = .);
+    *(.tbss .tbss.*)
+    . = ALIGN(4);
+    PROVIDE(_tbss_end = .);
+  } >REGION_RODATA
+
   /* read-only data segment */
   .rodata : ALIGN(4) {
     *(.rodata) *(.rodata.*) *(.gnu.linkonce.r.*)
@@ -92,6 +115,14 @@ SECTIONS {
   PROVIDE( __sdata_source_start = LOADADDR(.sdata) );
   PROVIDE( __sdata_target_start = ADDR(.sdata) );
   PROVIDE( __sdata_target_end = ADDR(.sdata) + SIZEOF(.sdata) );
+
+  PROVIDE( __init_array_source_start = LOADADDR(.init_array) );
+  PROVIDE( __init_array_target_start = ADDR(.init_array) );
+  PROVIDE( __init_array_target_end = ADDR(.init_array) + SIZEOF(.init_array) );
+
+  PROVIDE( __fini_array_source_start = LOADADDR(.fini_array) );
+  PROVIDE( __fini_array_target_start = ADDR(.fini_array) );
+  PROVIDE( __fini_array_target_end = ADDR(.fini_array) + SIZEOF(.fini_array) );
 
   /* bss segment */
   .sbss : {
