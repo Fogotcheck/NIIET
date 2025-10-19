@@ -2,7 +2,9 @@ OUTPUT_ARCH( "riscv" )
 ENTRY(_start)
 
 _estack = ORIGIN(REGION_STACK) + LENGTH(REGION_STACK);
-_Min_Heap_Size = LENGTH(REGION_HEAP); /* required amount of heap */
+_Min_Stack_Size = 0x1000; /* required amount of stack */
+_Min_Heap_Size = LENGTH(REGION_HEAP) - _Min_Stack_Size; /* required amount of heap */
+
 
 MEMORY {
   FLASH  (rx)  : ORIGIN = 0x80000000, LENGTH = 1024K
@@ -14,7 +16,7 @@ REGION_ALIAS("REGION_TEXT",   FLASH );
 REGION_ALIAS("REGION_RODATA", FLASH );
 REGION_ALIAS("REGION_DATA",   RAM);
 REGION_ALIAS("REGION_BSS",    RAM);
-REGION_ALIAS("REGION_STACK",  RAM);
+REGION_ALIAS("REGION_STACK",  CCMRAM);
 REGION_ALIAS("REGION_HEAP",   CCMRAM);
 
 STACK_SIZE = 2048;
@@ -146,13 +148,15 @@ SECTIONS {
                           MAX(__SDATA_BEGIN__ + 0x780, __BSS_END__ - 0x780));
 
   /* User_heap_stack section, used to check that there is enough "RAM" Ram  type memory left */
-  ._user_heap :
+  ._user_heap_stack :
   {
     . = ALIGN(16);
     PROVIDE ( end = . );
     PROVIDE ( _end = . );
     PROVIDE ( __end = . );
     . = . + _Min_Heap_Size;
+    . = . + _Min_Stack_Size;
+    . = ALIGN(16);
   } >REGION_HEAP
 
   /* discard relocation code */

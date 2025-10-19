@@ -28,7 +28,6 @@ target_sources(
     ${MODULE_NAME}_INTERFACE
     INTERFACE
     startup_k1921vg015.S
-    sys/sysmem.c
 )
 
 target_compile_definitions(
@@ -51,8 +50,8 @@ set(
     K1921VG015_CORE
     ${niat_SOURCE_DIR}/platform/Device/K1921VG015/source/mtimer.c
     ${niat_SOURCE_DIR}/platform/Device/K1921VG015/source/plic.c
-    ${niat_SOURCE_DIR}/platform/Device/K1921VG015/source/printf.c
-    ${niat_SOURCE_DIR}/platform/Device/K1921VG015/source/retarget.c
+    # ${niat_SOURCE_DIR}/platform/Device/K1921VG015/source/printf.c
+    # ${niat_SOURCE_DIR}/platform/Device/K1921VG015/source/retarget.c
 
     ${niat_SOURCE_DIR}/platform/Device/K1921VG015/source/startup_k1921vg015.S
     ${niat_SOURCE_DIR}/platform/Device/K1921VG015/source/sys_init.c

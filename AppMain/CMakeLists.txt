@@ -5,6 +5,8 @@ set(MODULE_NAME ${PROJECT_NAME})
 add_executable(
     ${MODULE_NAME}
     AppMain.c
+    sys/syscalls.c
+    sys/sysmem.c
 )
 
 target_link_options(

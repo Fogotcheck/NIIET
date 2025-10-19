@@ -33,7 +33,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <system_k1921vg015.h>
-#include "retarget.h"
+#include "logger.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -207,11 +207,11 @@ void periph_init()
 	retarget_init();
 	UART1_init();
 	DMA_UART1_init();
-	printf("K1921VG015 SYSCLK = %d MHz\n", (int)(SystemCoreClock / 1E6));
-	printf("  UID[0] = 0x%X  UID[1] = 0x%X  UID[2] = 0x%X  UID[3] = 0x%X\n",
-	       (unsigned int)PMUSYS->UID[0], (unsigned int)PMUSYS->UID[1],
-	       (unsigned int)PMUSYS->UID[2], (unsigned int)PMUSYS->UID[3]);
-	printf("  Start UART1(TX - A.3,  RX - A.2) DMA\n");
+	FINFO("K1921VG015 SYSCLK = %d MHz", (int)(SystemCoreClock / 1E6));
+	FINFO("UID[0] = 0x%X  UID[1] = 0x%X  UID[2] = 0x%X  UID[3] = 0x%X",
+	      (unsigned int)PMUSYS->UID[0], (unsigned int)PMUSYS->UID[1],
+	      (unsigned int)PMUSYS->UID[2], (unsigned int)PMUSYS->UID[3]);
+	FINFO("Start UART1(TX - A.3,  RX - A.2) DMA\r\n");
 }
 
 //--- USER FUNCTIONS ----------------------------------------------------------------------
@@ -244,6 +244,11 @@ int main(void)
 void MainThr(__attribute__((unused)) void *arg)
 {
 	TMR32_init(SystemCoreClock >> 4);
+
+	FWARNING("\texample::\t%f", 0.123);
+	FERROR("\t\texample::\t%f", 0.123);
+	FINFO("\t\texample::\t%s", "Hello world");
+
 	while (1) {
 		vTaskDelay(1000);
 	}
@@ -282,9 +287,9 @@ void DMA_CH_12_IRQHandler()
 		DMA->IRQSTATCLR = DMA_IRQSTATCLR_CH12_Msk;
 		UART1->DMACR_bit.RXDMAE =
 			0; //Запрет DMA обрабатывать запросы приемного буфера UART1
-		printf("\nUART1 Echo: ");
+		FINFO("\nUART1 Echo: ");
 		for (i = 0; i < UBUFF_SIZE; i++)
-			retarget_put_char(UBUFF[i]);
+			__io_putchar(UBUFF[i]);
 		UART1->DMACR_bit.TXDMAE =
 			1; //Разрешение DMA обрабатывать запросы передающего буфера UART1
 	}
