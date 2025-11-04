@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(exmp VERSION 0.3.0 LANGUAGES CXX C ASM)
+project(exmp VERSION 0.3.1 LANGUAGES CXX C ASM)
 
 set(CMAKE_EXECUTABLE_SUFFIX ".elf")
 set(CPACK_PACKAGE_CHECKSUM MD5)
